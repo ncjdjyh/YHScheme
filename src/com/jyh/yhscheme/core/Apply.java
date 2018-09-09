@@ -1,7 +1,9 @@
 package com.jyh.yhscheme.core;
 
-import com.jyh.yhscheme.Built;
+import com.jyh.yhscheme.bulitfunction.BuiltFunction;
 import com.jyh.yhscheme.Expression;
+import com.jyh.yhscheme.keyword.Def;
+import com.jyh.yhscheme.type.Function;
 import com.jyh.yhscheme.util.Constant;
 
 import java.util.ArrayList;
@@ -18,8 +20,12 @@ public class Apply {
         if (val.matches("\\d+")) {
             return new Integer(val);
         } else {
-            System.err.println("Error token" + val);
-            return null;
+            Object result = env.findVariable(val);
+            if (result != null) return result;
+            else {
+                System.err.println("Error token" + val);
+                return null;
+            }
         }
     }
 
@@ -39,18 +45,60 @@ public class Apply {
         }
         switch (operator) {
             case Constant.ADD: {
-                return Built.add(params);
+                return BuiltFunction.add(params);
             }
             case Constant.SUB: {
-                return Built.sub(params);
+                return BuiltFunction.sub(params);
             }
             case Constant.MUL: {
-                return Built.mul(params);
+                return BuiltFunction.mul(params);
             }
             case Constant.DIV: {
-                return Built.div(params);
+                return BuiltFunction.div(params);
             }
         }
-        return 0;
+        return null;
+    }
+
+    public static Object keywordEval(Expression exp, Environment env) {
+        String keyword = exp.getOperator();
+        switch (keyword) {
+            case Constant.DEF: {
+                Def def = new Def(exp);
+                return defEval(def, env);
+            }
+            case Constant.LAMBDA: {
+                Function func = new Function(exp, env);
+                return func;
+            }
+        }
+        return null;
+    }
+
+    private static Object defEval(Def def, Environment env) {
+        env.extendEnvironment(def.getVar(), Eval.eval(def.getVal(), env));
+        return "ok";
+    }
+
+    public static Object functionEval(Expression exp, Environment env) {
+        Object realParams = getRealParams(exp, env);
+        Function func = getFunc(exp, env);
+        func.getCurrentEnv().extendEnvironment((String) func.getParams(), realParams);
+        return Eval.eval(func.getBody(), func.getCurrentEnv());
+    }
+
+    private static Object getRealParams(Expression exp, Environment env) {
+        return Eval.eval(exp.getChildren().get(exp.getChildren().size() - 2), env);
+    }
+
+    private static Function getFunc(Expression exp, Environment env) {
+        return (Function) Eval.eval(exp.getChildren().get(0), env);
+    }
+
+    private static void callNormalFunc(Expression exp, Environment env) {
+    }
+
+    private static void callAnonyFunc(Expression exp, Environment env) {
+        //Expression param = exp
     }
 }

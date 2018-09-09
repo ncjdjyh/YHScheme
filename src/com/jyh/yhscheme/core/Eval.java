@@ -1,6 +1,7 @@
 package com.jyh.yhscheme.core;
 
 import com.jyh.yhscheme.Expression;
+import com.jyh.yhscheme.util.EvalUtil;
 
 public class Eval {
     /**
@@ -11,8 +12,12 @@ public class Eval {
     public static Object eval(Expression exp, Environment env) {
         if (isSelfEval(exp)) {
             return Apply.selfEval(exp, env);
-        } else {
+        } else if (isKeywordEval(exp)) {
+            return Apply.keywordEval(exp, env);
+        } else if (isEssentialEval(exp) ){
             return Apply.essentialEval(exp, env);
+        } else {
+            return Apply.functionEval(exp, env);
         }
     }
 
@@ -20,4 +25,11 @@ public class Eval {
         return exp.getChildren().size() == 0;
     }
 
+    private static boolean isKeywordEval(Expression exp) {
+        return EvalUtil.keywordSet.contains(exp.getOperator());
+    }
+
+    private static boolean isEssentialEval(Expression exp) {
+        return EvalUtil.bulitSet.contains(exp.getOperator());
+    }
 }

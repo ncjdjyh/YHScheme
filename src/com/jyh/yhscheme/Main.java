@@ -23,7 +23,7 @@ public class Main {
 
 class ReadPrintLoop implements Runnable {
     BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
-    Environment rootEnv = new Environment();
+    Environment rootEnv = new Environment(null);
 
     public void run() {
         String src;

@@ -17,7 +17,7 @@ public class Expression {
     public Expression(Expression parent, String value) {
         this.parent = parent;
         this.value = value;
-        children = new ArrayList<>();
+        this.children = new ArrayList<>();
     }
 
     public void addChild(Expression exp) {
@@ -47,5 +47,18 @@ public class Expression {
     public List<Expression> getOperands() {
         int length = this.children.size();
         return this.children.subList(1, length - 1);
+    }
+
+    @Override
+    public String toString() {
+        if (0 == children.size()) {
+            return value;
+        } else {
+            StringBuffer displayBuffer = new StringBuffer(value + " ");
+            for (Expression child : children) {
+                displayBuffer.append(child.toString() + " ");
+            }
+            return displayBuffer.toString();
+        }
     }
 }
