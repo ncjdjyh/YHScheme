@@ -32,8 +32,8 @@ public class Expression {
         return children;
     }
 
-    public void setChildren(List<Expression> children) {
-        this.children = children;
+    public int getChildrenLength() {
+        return this.children.size();
     }
 
     public String getValue() {

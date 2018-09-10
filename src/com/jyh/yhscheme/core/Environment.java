@@ -1,16 +1,17 @@
 package com.jyh.yhscheme.core;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class Environment {
+public class Environment implements Cloneable {
     /**
      * @Auther: ncjdjyh
      * @Date: 2018/9/8 15:35
      * @Description: 求值环境
      */
     private Environment parentEnv;
-    private Map<String, Object> table;
+    private HashMap<String, Object> table;
 
     public Environment(Environment parentEnv) {
         this.parentEnv = parentEnv;
@@ -43,5 +44,27 @@ public class Environment {
 
     public void extendEnvironment(String key, Object value) {
         this.table.put(key, value);
+    }
+
+    public void extendEnvironment(List<String> keys, List<Object> values) {
+        for (int i = 0; i < keys.size(); i++) {
+            extendEnvironment(keys.get(i), values.get(i));
+        }
+    }
+
+    @Override
+    public Environment clone() throws CloneNotSupportedException {
+        Environment newEnv = (Environment) super.clone();
+        newEnv.table = (HashMap<String, Object>) table.clone();
+        return newEnv;
+    }
+
+    @Override
+    public String toString() {
+        StringBuffer displayBuffer = new StringBuffer();
+        for (Map.Entry<String, Object> entry: table.entrySet()) {
+            displayBuffer.append(entry.getKey() + "->" + entry.getValue() + "   ");
+        }
+        return displayBuffer.toString();
     }
 }

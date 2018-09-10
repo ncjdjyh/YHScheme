@@ -81,24 +81,26 @@ public class Apply {
     }
 
     public static Object functionEval(Expression exp, Environment env) {
-        Object realParams = getRealParams(exp, env);
+        List<Object> realParams = getRealParams(exp, env);
         Function func = getFunc(exp, env);
-        func.getCurrentEnv().extendEnvironment((String) func.getParams(), realParams);
-        return Eval.eval(func.getBody(), func.getCurrentEnv());
+        Environment currentEnv = func.getCurrentEnv();
+        //求值过程时创建新环境 就是当前过程闭包的环境 并且指向父环境
+        Environment funcEnv = new Environment(currentEnv);
+        //扩充求值环境
+        funcEnv.extendEnvironment(func.getParams(), realParams);
+        return Eval.eval(func.getBody(), funcEnv);
     }
 
-    private static Object getRealParams(Expression exp, Environment env) {
-        return Eval.eval(exp.getChildren().get(exp.getChildren().size() - 2), env);
+    private static List<Object> getRealParams(Expression exp, Environment env) {
+        List<Object> params = new ArrayList<>();
+        List<Expression> expParams = exp.getChildren().subList(1, exp.getChildrenLength() - 1);
+        for (Expression e: expParams) {
+            params.add(Eval.eval(e, env));
+        }
+        return params;
     }
 
     private static Function getFunc(Expression exp, Environment env) {
         return (Function) Eval.eval(exp.getChildren().get(0), env);
-    }
-
-    private static void callNormalFunc(Expression exp, Environment env) {
-    }
-
-    private static void callAnonyFunc(Expression exp, Environment env) {
-        //Expression param = exp
     }
 }
