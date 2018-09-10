@@ -30,6 +30,6 @@ public class Eval {
     }
 
     private static boolean isEssentialEval(Expression exp) {
-        return EvalUtil.bulitSet.contains(exp.getOperator());
+        return EvalUtil.builtSet.contains(exp.getOperator());
     }
 }
