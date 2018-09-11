@@ -23,10 +23,6 @@ public class Let {
         this.generate();
     }
 
-    public Expression getExp() {
-        return exp;
-    }
-
     public List<String> getBindKeys() {
         return bindKeys;
     }
@@ -40,11 +36,11 @@ public class Let {
     }
 
     public void generate() {
-        List<Expression> paramsTable = this.exp.getChildren().get(1).getChildren().subList(0, this.exp.getChildren().get(1).getChildrenLength() - 1);
+        List<Expression> paramsTable = this.exp.getFirstSubExpression().getChildrenExceptBracket();
         for (Expression e : paramsTable) {
             this.bindKeys.add(e.getChildren().get(0).getValue());
             this.bindValues.add(e.getChildren().get(1));
-        }
+    }
 
         this.body = this.exp.getChildren().get(2);
     }

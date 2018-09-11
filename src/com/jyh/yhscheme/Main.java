@@ -2,6 +2,7 @@ package com.jyh.yhscheme;
 
 import com.jyh.yhscheme.core.Environment;
 import com.jyh.yhscheme.core.Eval;
+import com.jyh.yhscheme.util.EnvUtil;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -23,9 +24,8 @@ public class Main {
 
 class ReadPrintLoop implements Runnable {
     BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
-    Environment rootEnv = new Environment(null);
-
     public void run() {
+        Environment rootEnv = EnvUtil.initEnv();
         String src;
         while (true) {
             System.out.print(">> ");

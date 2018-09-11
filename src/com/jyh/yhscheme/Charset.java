@@ -1,4 +1,4 @@
-package com.jyh.yhscheme.util;
+package com.jyh.yhscheme;
 
 public class Charset {
     /**

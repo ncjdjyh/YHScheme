@@ -18,7 +18,7 @@ public class Def {
     }
 
     private void generate() {
-        this.var = exp.getChildren().get(1).getValue();
+        this.var = exp.getFirstSubExpression().getValue();
         this.val = exp.getChildren().get(2);
     }
 

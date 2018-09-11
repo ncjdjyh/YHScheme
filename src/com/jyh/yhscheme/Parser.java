@@ -1,7 +1,5 @@
 package com.jyh.yhscheme;
 
-import com.jyh.yhscheme.util.Charset;
-
 public class Parser {
     /**
      * @Auther: ncjdjyh

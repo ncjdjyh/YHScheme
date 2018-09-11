@@ -22,7 +22,7 @@ public class Lambda {
 
     private void generate() {
         List<String> params = new ArrayList<>();
-        List<Expression> expParams = exp.getChildren().get(1).getChildren().subList(0, exp.getChildren().get(1).getChildren().size() - 1);
+        List<Expression> expParams = exp.getFirstSubExpression().getChildrenExceptBracket();
         for (Expression e : expParams) {
             params.add(e.getValue());
         }

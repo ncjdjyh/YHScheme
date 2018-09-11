@@ -29,7 +29,15 @@ public class Expression {
     }
 
     public List<Expression> getChildren() {
-        return children;
+        return this.children;
+    }
+
+    public List<Expression> getChildrenExceptBracket () {
+        return this.children.subList(0, children.size() - 1);
+    }
+
+    public Expression getFirstSubExpression() {
+        return this.children.get(1);
     }
 
     public int getChildrenLength() {
@@ -37,7 +45,7 @@ public class Expression {
     }
 
     public String getValue() {
-        return value;
+        return this.value;
     }
 
     public String getOperator() {
@@ -52,9 +60,9 @@ public class Expression {
     @Override
     public String toString() {
         if (0 == children.size()) {
-            return value;
+            return this.value;
         } else {
-            StringBuffer displayBuffer = new StringBuffer(value + " ");
+            StringBuffer displayBuffer = new StringBuffer(this.value + " ");
             for (Expression child : children) {
                 displayBuffer.append(child.toString() + " ");
             }

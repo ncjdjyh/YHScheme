@@ -21,7 +21,7 @@ public class Begin {
     }
 
     private void generate() {
-        this.elements = this.exp.getChildren().subList(1, this.exp.getChildrenLength() - 1);
+        this.elements = exp.getOperands();
     }
 
     public List<Expression> getElements() {

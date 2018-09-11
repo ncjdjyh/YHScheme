@@ -19,7 +19,7 @@ public class If {
     }
 
     private void generate() {
-        this.predicate = exp.getChildren().get(1);
+        this.predicate = exp.getFirstSubExpression();
         this.realCondition = exp.getChildren().get(2);
         this.fakeCondition = exp.getChildren().get(3);
     }

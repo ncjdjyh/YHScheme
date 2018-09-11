@@ -1,11 +1,11 @@
 package com.jyh.yhscheme.core;
 
-import com.jyh.yhscheme.bulitfunction.BuiltFunction;
 import com.jyh.yhscheme.Expression;
-import com.jyh.yhscheme.keyword.*;
 import com.jyh.yhscheme.type.Function;
-import com.jyh.yhscheme.util.Charset;
+import com.jyh.yhscheme.util.EnvUtil;
+import com.jyh.yhscheme.util.EvalUtil;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +17,7 @@ public class Apply {
      */
 
     /*单个元素求值*/
-    public static Object selfEval(Expression exp, Environment env) {
+    public static Object evalSelf(Expression exp, Environment env) {
         String val = exp.getValue();
         if (val.matches("\\d+")) {
             return new Integer(val);
@@ -25,7 +25,7 @@ public class Apply {
             Object result = env.findVariable(val);
             if (result != null) return result;
             else {
-                System.err.println("Error token" + val);
+                System.err.println("Error token  " + val);
                 return null;
             }
         }
@@ -35,35 +35,35 @@ public class Apply {
     public static Object essentialEval(Expression exp, Environment env) {
         String operator = exp.getOperator();
         List<Expression> operands = exp.getOperands();
-        List<Object> params = new ArrayList<>();
-        for (Expression e : operands) {
-            params.add(Eval.eval(e, env));
+        List<Object> params = EvalUtil.extractEvalParams(operands, env);
+        return executeBuiltFunction(operator, params);
+    }
+
+    /*使用反射调用基本过程*/
+    private static Object executeBuiltFunction(String operator, List<Object> params) {
+        String className = "com.jyh.yhscheme.BuiltFunction";
+        String methodName = EnvUtil.builtMap.get(operator);
+        try {
+            Class<?> clazz = Class.forName(className);
+            Method method = clazz.getMethod(methodName, List.class);
+            return method.invoke(clazz, params);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        switch (operator) {
-            case Charset.ADD: {
-                return BuiltFunction.add(params);
-            }
-            case Charset.SUB: {
-                return BuiltFunction.sub(params);
-            }
-            case Charset.MUL: {
-                return BuiltFunction.mul(params);
-            }
-            case Charset.DIV: {
-                return BuiltFunction.div(params);
-            }
-            case Charset.GT: {
-                return BuiltFunction.gt(params);
-            }
-            case Charset.LT: {
-                return BuiltFunction.lt(params);
-            }
-            case Charset.EQ: {
-                return BuiltFunction.eq(params);
-            }
-            case Charset.PRINT: {
-                return BuiltFunction.display(params);
-            }
+        return null;
+    }
+
+    /*使用反射求值关键字*/
+    private static Object executeKeywordFunction(String keyword, Expression exp, Environment env) {
+        String className = "com.jyh.yhscheme.util.KeywordEvalUtil";
+        String methodName = EnvUtil.keywordSet.get(keyword);
+        try {
+            Class<?> clazz = Class.forName(className);
+            //getDeclaredMethod可以获取私有方法
+            Method method = clazz.getDeclaredMethod(methodName, Expression.class, Environment.class);
+            return method.invoke(clazz, exp, env);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return null;
     }
@@ -71,69 +71,11 @@ public class Apply {
     /*关键字求值*/
     public static Object keywordEval(Expression exp, Environment env) {
         String keyword = exp.getOperator();
-        switch (keyword) {
-            case Charset.DEF: {
-                Def def = new Def(exp);
-                return defEval(def, env);
-            }
-            case Charset.LAMBDA: {
-                Lambda lambda = new Lambda(exp);
-                return lambdaEval(lambda, env);
-            }
-            case Charset.IF: {
-                If jIf = new If(exp);
-                return IfEval(jIf, env);
-            }
-            case Charset.LET: {
-                Let let = new Let(exp);
-                return letEval(let, env);
-            }
-            case Charset.Begin: {
-                Begin begin = new Begin(exp);
-                return beginEval(begin, env);
-            }
-        }
-        return null;
-    }
-
-    private static Object beginEval(Begin begin, Environment env) {
-        List<Expression> es = begin.getElements();
-        return evalAllAndReturnLastResult(es, env);
-    }
-
-    private static Object letEval(Let let, Environment env) {
-        List<String> keys = let.getBindKeys();
-        List<Object> values = extractEvalParams(let.getBindValues(), env);
-        Environment letEnv = null;
-        try {
-            letEnv = env.clone();
-        } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
-        }
-        letEnv.extendEnvironment(keys, values);
-        return Eval.eval(let.getBody(), letEnv);
-    }
-
-    private static Object IfEval(If jIf, Environment env) {
-        Boolean ok = (Boolean) Eval.eval(jIf.getPredicate(), env);
-        if (ok) {
-            return Eval.eval(jIf.getRealCondition(), env);
-        } else {
-            return Eval.eval(jIf.getFakeCondition(), env);
-        }
-    }
-
-    private static Object lambdaEval(Lambda lambda, Environment env) {
-        return new Function(lambda.getParams(), lambda.getBody(), env);
-    }
-
-    private static Object defEval(Def def, Environment env) {
-        env.extendEnvironment(def.getVar(), Eval.eval(def.getVal(), env));
-        return "ok";
+        return executeKeywordFunction(keyword, exp, env);
     }
 
     /*过程求值*/
-    public static Object functionEval(Expression exp, Environment env) {
+    public static Object evalFunction(Expression exp, Environment env) {
         List<Object> realParams = getRealParams(exp, env);
         Function func = getFunc(exp, env);
         Environment currentEnv = func.getCurrentEnv();
@@ -141,7 +83,7 @@ public class Apply {
         Environment funcEnv = new Environment(currentEnv);
         //扩充求值环境
         funcEnv.extendEnvironment(func.getParams(), realParams);
-        return evalAllAndReturnLastResult(func.getBody(), funcEnv);
+        return EvalUtil.evalAllAndReturnLastResult(func.getBody(), funcEnv);
     }
 
     private static List<Object> getRealParams(Expression exp, Environment env) {
@@ -155,23 +97,5 @@ public class Apply {
 
     private static Function getFunc(Expression exp, Environment env) {
         return (Function) Eval.eval(exp.getChildren().get(0), env);
-    }
-
-    /*提取所有求值以后的参数*/
-    private static List<Object> extractEvalParams(List<Expression> es, Environment env) {
-        List<Object> params = new ArrayList<>();
-        for (Expression e : es) {
-            params.add(Eval.eval(e, env));
-        }
-        return params;
-    }
-
-    /*解释所有元素并返回最后一个元素求值的结果*/
-    private static Object evalAllAndReturnLastResult(List<Expression> es, Environment env) {
-        int lastIndex = es.size() - 1;
-        for (int i = 0; i < lastIndex; i++) {
-            Eval.eval(es.get(i), env);
-        }
-        return Eval.eval(es.get(lastIndex), env);
     }
 }
