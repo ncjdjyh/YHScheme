@@ -1,6 +1,6 @@
 package com.jyh.yhscheme.util;
 
-public class Constant {
+public class Charset {
     /**
      * @Auther: ncjdjyh
      * @Date: 2018/9/7 10:06
@@ -23,22 +23,26 @@ public class Constant {
     public static final String GT = ">";
     public static final String LT = "<";
     public static final String EQ = "=";
+
     // pair functions
     public static final String CONS = "cons";
     public static final String CAR = "car";
     public static final String CDR = "cdr";
     public static final String LIST = "list";
     public static final String NULL = "null?";
+
     // string functions
     public static final String STR_EQ = "str=?";
 
     // builtin helper functions
-    public static final String PRINT = "print";
+    public static final String PRINT = "display";
 
     // builtin keywords
     public static final String DEF = "def";
     public static final String IF = "if";
     public static final String LAMBDA = "lambda";
+    public static final String LET = "let";
+    public static final String Begin = "begin";
 
     // builtin literals
     public static final String NIL = "nil";

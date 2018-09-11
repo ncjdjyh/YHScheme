@@ -1,6 +1,6 @@
 package com.jyh.yhscheme;
 
-import com.jyh.yhscheme.util.Constant;
+import com.jyh.yhscheme.util.Charset;
 
 public class Parser {
     /**
@@ -41,11 +41,11 @@ public class Parser {
                 parent.addChild(node);
             }
             switch (t) {
-                case Constant.START_TOKEN: {
+                case Charset.START_TOKEN: {
                     parent = node;
                     break;
                 }
-                case Constant.END_TOKEN: {
+                case Charset.END_TOKEN: {
                     parent = parent.getParent();
                     break;
                 }

@@ -26,14 +26,8 @@ public class Environment implements Cloneable {
         return table;
     }
 
+    /*找变量绑定的值, 本环境找不到就到父环境找*/
     public Object findVariable(String key) {
-        /**
-         * 功能描述: 找变量绑定的值, 本环境找不到就到父环境找
-         * @param: [key]
-         * @return: java.lang.Object
-         * @auther: ncjdjyh
-         * @date: 2018/9/9
-         */
         if (this.table.containsKey(key))
             return this.table.get(key);
         else {
@@ -60,9 +54,14 @@ public class Environment implements Cloneable {
     }
 
     @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
+    }
+
+    @Override
     public String toString() {
         StringBuffer displayBuffer = new StringBuffer();
-        for (Map.Entry<String, Object> entry: table.entrySet()) {
+        for (Map.Entry<String, Object> entry : table.entrySet()) {
             displayBuffer.append(entry.getKey() + "->" + entry.getValue() + "   ");
         }
         return displayBuffer.toString();
