@@ -20,7 +20,6 @@ public class Lambda {
     }
 
     private void generate() {
-
         this.params = exp.findChild(1).getParams();
         this.body = exp.findSubExpression(2);
     }

@@ -55,4 +55,18 @@ public class KeywordEvalUtil {
         env.extendEnvironment(def.getVar(), def.getVal());
         return "ok";
     }
+
+    public static Object evalCond(Expression exp, Environment env) {
+        Cond cond = new Cond(exp);
+        List<Expression> conditions = cond.getConditions();
+        for(int i = 0; i < conditions.size(); i++) {
+            Expression e = conditions.get(i);
+            if (i == (conditions.size() - 1)) return Eval.eval(e.findChild(0), env);
+            Expression predicate = e.findChild(0);
+            if ((Boolean) Eval.eval(predicate, env) == true) {
+                return Eval.eval(e.findChild(1), env);
+            }
+        }
+        return null;
+    }
 }
