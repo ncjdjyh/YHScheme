@@ -37,4 +37,12 @@ public class DefTest {
         Expression exp2 = Parser.parse(tokens2);
         Assert.assertEquals(Eval.eval(exp2, env), 11);
     }
+
+    @Test
+    public void letTest() {
+        String src = "(let ((x 1) (y 2)) (+ x y))";
+        String[] tokens = Parser.getTokens(src);
+        Expression exp = Parser.parse(tokens);
+        Assert.assertEquals(Eval.eval(exp, env), 3);
+    }
 }

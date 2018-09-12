@@ -55,11 +55,6 @@ public class Environment implements Cloneable {
     }
 
     @Override
-    protected void finalize() throws Throwable {
-        super.finalize();
-    }
-
-    @Override
     public String toString() {
         StringBuffer displayBuffer = new StringBuffer();
         for (Map.Entry<String, Object> entry : table.entrySet()) {

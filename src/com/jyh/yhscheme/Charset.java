@@ -42,7 +42,8 @@ public class Charset {
     public static final String IF = "if";
     public static final String LAMBDA = "lambda";
     public static final String LET = "let";
-    public static final String Begin = "begin";
+    public static final String BEGIN = "begin";
+    public static final String COND = "cond";
 
     // builtin literals
     public static final String NIL = "nil";

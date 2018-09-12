@@ -1,7 +1,6 @@
 package com.jyh.yhscheme.keyword;
 
 import com.jyh.yhscheme.Expression;
-import com.jyh.yhscheme.util.ExpUtil;
 
 import java.util.List;
 
@@ -21,8 +20,9 @@ public class Lambda {
     }
 
     private void generate() {
-        this.params = ExpUtil.getParams(ExpUtil.findChild(1, exp));
-        this.body = ExpUtil.findSubExpression(2, exp);
+
+        this.params = exp.findChild(1).getParams();
+        this.body = exp.findSubExpression(2);
     }
 
     public List<String> getParams() {

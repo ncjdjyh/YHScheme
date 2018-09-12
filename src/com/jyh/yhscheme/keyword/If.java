@@ -19,9 +19,9 @@ public class If {
     }
 
     private void generate() {
-        this.predicate = exp.getFirstSubExpression();
-        this.realCondition = exp.getChildren().get(2);
-        this.fakeCondition = exp.getChildren().get(3);
+        this.predicate = exp.findChild(1);
+        this.realCondition = exp.findChild(2);
+        this.fakeCondition = exp.findChild(3);
     }
 
     public Expression getExp() {

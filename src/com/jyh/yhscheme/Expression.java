@@ -32,14 +32,6 @@ public class Expression {
         return this.children;
     }
 
-    public List<Expression> getChildrenExceptBracket () {
-        return this.children.subList(0, children.size() - 1);
-    }
-
-    public Expression getFirstSubExpression() {
-        return this.children.get(1);
-    }
-
     public int getChildrenLength() {
         return this.children.size();
     }
@@ -55,6 +47,42 @@ public class Expression {
     public List<Expression> getOperands() {
         int length = this.children.size();
         return this.children.subList(1, length - 1);
+    }
+
+    public Expression findChild(int index) {
+        return children.get(index);
+    }
+
+    public String findChildValue(int index) {
+        return children.get(index).getValue();
+    }
+
+    public List<Expression> getChildrenExceptBracket() {
+        return findSubExpression(0);
+    }
+
+    public List<Expression> getChildrenExceptBracketAndOperator() {
+        return findSubExpression(1);
+    }
+
+    public List<Expression> findSubExpression(int from) {
+        return children.subList(from, getChildrenLength() - 1);
+    }
+
+    public List<String> getParams() {
+        return getExpParamsValues(getChildrenExceptBracket());
+    }
+
+    public List<String> getParamsExceptOperator() {
+        return getExpParamsValues(getChildrenExceptBracketAndOperator());
+    }
+
+    private List<String> getExpParamsValues(List<Expression> expParams) {
+        List<String> params = new ArrayList<>();
+        for (Expression e : expParams) {
+            params.add(e.getValue());
+        }
+        return params;
     }
 
     @Override

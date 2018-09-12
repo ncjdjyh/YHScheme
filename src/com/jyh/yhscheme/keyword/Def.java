@@ -5,7 +5,6 @@ import com.jyh.yhscheme.Expression;
 import com.jyh.yhscheme.core.Environment;
 import com.jyh.yhscheme.core.Eval;
 import com.jyh.yhscheme.type.Function;
-import com.jyh.yhscheme.util.ExpUtil;
 
 import java.util.List;
 
@@ -30,16 +29,16 @@ public class Def {
     /*在这里本来想法是如果是普通过程就转化为lambda过程进行求值
     * 但是没有完成, 一是因为转化比较繁琐, 二是因为效率不高(要再次词法语法分析)*/
     private void generate() {
-        boolean isNormalDef = ExpUtil.findChildValue(1, exp).equals(Charset.START_TOKEN);
+        boolean isNormalDef = exp.findChildValue(1).equals(Charset.START_TOKEN);
         if (isNormalDef) {
-            Expression funcHead = ExpUtil.findChild(1, exp);
+            Expression funcHead = exp.findChild(1);
             this.var = funcHead.getOperator();
-            List<String> params = ExpUtil.getParamsExceptOperator(funcHead);
-            List<Expression> funcBody = ExpUtil.findSubExpression(2, exp);
+            List<String> params = funcHead.getParamsExceptOperator();
+            List<Expression> funcBody = exp.findSubExpression(2);
             this.val = new Function(params, funcBody, env);
         } else {
-            this.var = ExpUtil.findChildValue(1, exp);
-            this.val = Eval.eval(ExpUtil.findChild(2, exp), env);
+            this.var = exp.findChildValue(1);
+            this.val = Eval.eval(exp.findChild(2), env);
         }
     }
 
@@ -49,9 +48,5 @@ public class Def {
 
     public Object getVal() {
         return val;
-    }
-
-    private boolean isLambdaDef() {
-        return exp.getChildren().get(2).getOperator().equals(Charset.LAMBDA);
     }
 }

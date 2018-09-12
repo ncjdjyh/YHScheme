@@ -57,7 +57,6 @@ public class Apply {
         String methodName = EnvUtil.keywordSet.get(keyword);
         try {
             Class<?> clazz = Class.forName(className);
-            //getDeclaredMethod可以获取私有方法
             Method method = clazz.getDeclaredMethod(methodName, Expression.class, Environment.class);
             return method.invoke(clazz, exp, env);
         } catch (Exception e) {
@@ -86,7 +85,7 @@ public class Apply {
 
     private static List<Object> getRealParams(Expression exp, Environment env) {
         List<Object> params = new ArrayList<>();
-        List<Expression> expParams = exp.getChildren().subList(1, exp.getChildrenLength() - 1);
+        List<Expression> expParams = exp.getChildrenExceptBracketAndOperator();
         for (Expression e : expParams) {
             params.add(Eval.eval(e, env));
         }

@@ -36,12 +36,11 @@ public class Let {
     }
 
     public void generate() {
-        List<Expression> paramsTable = this.exp.getFirstSubExpression().getChildrenExceptBracket();
+        List<Expression> paramsTable = exp.findChild(1).getChildrenExceptBracket();
         for (Expression e : paramsTable) {
-            this.bindKeys.add(e.getChildren().get(0).getValue());
-            this.bindValues.add(e.getChildren().get(1));
+            this.bindKeys.add(e.findChildValue(0));
+            this.bindValues.add(e.findChild(1));
     }
-
-        this.body = this.exp.getChildren().get(2);
+        this.body = this.exp.findChild(2);
     }
 }

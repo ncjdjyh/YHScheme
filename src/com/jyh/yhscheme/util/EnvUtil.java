@@ -25,7 +25,7 @@ public class EnvUtil {
         keywordSet.put(Charset.IF, "evalIf");
         keywordSet.put(Charset.LAMBDA, "evalLambda");
         keywordSet.put(Charset.LET, "evalLet");
-        keywordSet.put(Charset.Begin, "evalBegin");
+        keywordSet.put(Charset.BEGIN, "evalBegin");
 
         builtMap.put(Charset.ADD, "add");
         builtMap.put(Charset.SUB, "sub");
