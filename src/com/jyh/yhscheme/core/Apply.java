@@ -39,7 +39,6 @@ public class Apply {
         return executeBuiltFunction(operator, params);
     }
 
-    /*使用反射调用基本过程*/
     private static Object executeBuiltFunction(String operator, List<Object> params) {
         String className = "com.jyh.yhscheme.BuiltFunction";
         String methodName = EnvUtil.builtMap.get(operator);
@@ -53,7 +52,6 @@ public class Apply {
         return null;
     }
 
-    /*使用反射求值关键字*/
     private static Object executeKeywordFunction(String keyword, Expression exp, Environment env) {
         String className = "com.jyh.yhscheme.util.KeywordEvalUtil";
         String methodName = EnvUtil.keywordSet.get(keyword);

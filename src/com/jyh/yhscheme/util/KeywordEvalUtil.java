@@ -51,8 +51,8 @@ public class KeywordEvalUtil {
     }
 
     public static Object evalDef(Expression exp, Environment env) {
-        Def def = new Def(exp);
-        env.extendEnvironment(def.getVar(), Eval.eval(def.getVal(), env));
+        Def def = new Def(exp, env);
+        env.extendEnvironment(def.getVar(), def.getVal());
         return "ok";
     }
 }

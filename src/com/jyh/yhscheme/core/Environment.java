@@ -36,6 +36,7 @@ public class Environment implements Cloneable {
         }
     }
 
+    /*扩充求值环境*/
     public void extendEnvironment(String key, Object value) {
         this.table.put(key, value);
     }

@@ -1,6 +1,14 @@
 package com.jyh.yhscheme.keyword;
 
+import com.jyh.yhscheme.Charset;
 import com.jyh.yhscheme.Expression;
+import com.jyh.yhscheme.core.Environment;
+import com.jyh.yhscheme.core.Eval;
+import com.jyh.yhscheme.type.Function;
+import com.jyh.yhscheme.util.ExpUtil;
+
+import java.util.List;
+
 
 public class Def {
     /**
@@ -10,23 +18,40 @@ public class Def {
      */
     private Expression exp;
     private String var;
-    private Expression val;
+    private Object val;
+    private Environment env;
 
-    public Def(Expression exp) {
+    public Def(Expression exp, Environment env) {
         this.exp = exp;
+        this.env = env;
         this.generate();
     }
 
+    /*在这里本来想法是如果是普通过程就转化为lambda过程进行求值
+    * 但是没有完成, 一是因为转化比较繁琐, 二是因为效率不高(要再次词法语法分析)*/
     private void generate() {
-        this.var = exp.getFirstSubExpression().getValue();
-        this.val = exp.getChildren().get(2);
+        boolean isNormalDef = ExpUtil.findChildValue(1, exp).equals(Charset.START_TOKEN);
+        if (isNormalDef) {
+            Expression funcHead = ExpUtil.findChild(1, exp);
+            this.var = funcHead.getOperator();
+            List<String> params = ExpUtil.getParamsExceptOperator(funcHead);
+            List<Expression> funcBody = ExpUtil.findSubExpression(2, exp);
+            this.val = new Function(params, funcBody, env);
+        } else {
+            this.var = ExpUtil.findChildValue(1, exp);
+            this.val = Eval.eval(ExpUtil.findChild(2, exp), env);
+        }
     }
 
     public String getVar() {
-        return this.var;
+        return var;
     }
 
-    public Expression getVal() {
-        return this.val;
+    public Object getVal() {
+        return val;
+    }
+
+    private boolean isLambdaDef() {
+        return exp.getChildren().get(2).getOperator().equals(Charset.LAMBDA);
     }
 }
