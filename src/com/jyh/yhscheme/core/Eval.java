@@ -17,7 +17,7 @@ public class Eval {
         } else if (isEssentialEval(exp) ){
             return Apply.essentialEval(exp, env);
         } else {
-            return Apply.evalFunction(exp, env);
+            return Apply.evalProcedure(exp, env);
         }
     }
 

@@ -4,7 +4,7 @@ import com.jyh.yhscheme.Charset;
 import com.jyh.yhscheme.Expression;
 import com.jyh.yhscheme.core.Environment;
 import com.jyh.yhscheme.core.Eval;
-import com.jyh.yhscheme.type.Function;
+import com.jyh.yhscheme.type.Procedure;
 
 import java.util.List;
 
@@ -35,7 +35,7 @@ public class Def {
             this.var = funcHead.getOperator();
             List<String> params = funcHead.getParamsExceptOperator();
             List<Expression> funcBody = exp.findSubExpression(2);
-            this.val = new Function(params, funcBody, env);
+            this.val = new Procedure(params, funcBody, env);
         } else {
             this.var = exp.findChildValue(1);
             this.val = Eval.eval(exp.findChild(2), env);

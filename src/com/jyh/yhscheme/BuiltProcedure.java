@@ -2,7 +2,7 @@ package com.jyh.yhscheme;
 
 import java.util.List;
 
-public class BuiltFunction {
+public class BuiltProcedure {
     /**
      * @param args
      * @Auther: ncjdjyh

@@ -6,7 +6,7 @@ import com.jyh.yhscheme.core.Environment;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Function {
+public class Procedure {
     /**
      * @Auther: ncjdjyh
      * @Date: 2018/9/9 15:17
@@ -29,7 +29,7 @@ public class Function {
     }
 
     //将过程体与此时的环境打包
-    public Function(List<String> params, List<Expression> body, Environment env) {
+    public Procedure(List<String> params, List<Expression> body, Environment env) {
         this.params = params;
         this.body = body;
         this.currentEnv = env;

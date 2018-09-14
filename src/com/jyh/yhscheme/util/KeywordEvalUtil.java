@@ -4,7 +4,7 @@ import com.jyh.yhscheme.Expression;
 import com.jyh.yhscheme.core.Environment;
 import com.jyh.yhscheme.core.Eval;
 import com.jyh.yhscheme.keyword.*;
-import com.jyh.yhscheme.type.Function;
+import com.jyh.yhscheme.type.Procedure;
 
 import java.util.List;
 
@@ -47,7 +47,7 @@ public class KeywordEvalUtil {
 
     public static Object evalLambda(Expression exp, Environment env) {
         Lambda lambda = new Lambda(exp);
-        return new Function(lambda.getParams(), lambda.getBody(), env);
+        return new Procedure(lambda.getParams(), lambda.getBody(), env);
     }
 
     public static Object evalDef(Expression exp, Environment env) {
