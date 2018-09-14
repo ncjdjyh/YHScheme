@@ -1,13 +1,13 @@
 ## YHScheme
 YHScheme may be a dialect of scheme programing in java, whatever, it`s my first own language though more like a toy.
 
-##Introduce
-###1.expression
+## Introduce
+### 1.expression
 Like other dialect of list, YHScheme adopted the prefix expression .
 
 like this	`(+ 1 1)` &emsp; `(/ 9 (* 3 (+ 1 2)))`
 
-###2.syntax
+### 2.syntax
 `Datatype` 
 
 - number
@@ -33,16 +33,16 @@ like this	`(+ 1 1)` &emsp; `(/ 9 (* 3 (+ 1 2)))`
 - =
 - print
 
-##How To Use
-You can see YHScheme.jar file in "/src" catelog, just run it like this `java -jar YHScheme.jar`
+## How To Use
+You can see YHScheme.jar file in "/src" catalog, just run it like this `java -jar YHScheme.jar`
 
 Here ara some example for the convenience of using.
 
 	;logic
-	(> 1 2)               			;false
+	(> 1 2)                         ;false           			
 	;def
 	(def (sum x y))
-	(sum 10 10)						;20
+	(sum 10 10)                     ;20					
 	;lambda
 	((lambda(x y) (+ x y)) 10 10)	;20
 	
