@@ -24,14 +24,14 @@ like this	`(+ 1 1)` &emsp; `(/ 9 (* 3 (+ 1 2)))`
 
 `essential procedure`
 
-- +
-- -
-- *
-- /
-- >
-- <
-- =
-- print
+- '+'
+- '-'
+- '*'
+- '/'
+- '>'
+- '<'
+- '='
+- 'print'
 
 ## How To Use
 You can see YHScheme.jar file in "/src" catalog, just run it like this `java -jar YHScheme.jar`
