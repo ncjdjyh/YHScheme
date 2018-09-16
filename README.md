@@ -3,7 +3,7 @@ YHScheme may be a dialect of scheme programing in java, whatever, it`s my first 
 
 ## Introduce
 ### 1.expression
-Like other dialect of list, YHScheme adopted the prefix expression .
+Like other dialect of lisp, YHScheme adopted the prefix expression .
 
 like this	`(+ 1 1)` &emsp; `(/ 9 (* 3 (+ 1 2)))`
 
